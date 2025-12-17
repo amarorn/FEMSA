@@ -419,7 +419,7 @@ app.layout = html.Div([
     # Header
     html.Div([
         html.Div([
-            html.A("← Voltar", href="http://localhost:8050", target="_self", style={
+            html.A("← Voltar", href="https://femsa-cenario1-tfhauqj6vq-uc.a.run.app", target="_self", style={
                 "color": COLORS['accent'],
                 "textDecoration": "none",
                 "fontSize": "14px",

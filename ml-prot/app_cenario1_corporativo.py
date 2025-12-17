@@ -2058,7 +2058,7 @@ app.layout = html.Div([
                             "fontWeight": "600",
                             "cursor": "pointer"
                         }),
-                        href="http://localhost:8051",
+                        href="https://femsa-mix-optimization-tfhauqj6vq-uc.a.run.app",
                         target="_blank",
                         style={"textDecoration": "none"}
                     )
