@@ -11,21 +11,21 @@ RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar arquivo de dependências
-COPY requirements-minimal.txt .
+# Copiar arquivo de dependências (caminho relativo à raiz do repo)
+COPY ml-prot/requirements-minimal.txt .
 
 # Instalar dependências Python
 RUN pip install --no-cache-dir -r requirements-minimal.txt
 
 # Copiar código da aplicação
-COPY app_cenario1_corporativo.py .
+COPY ml-prot/app_cenario1_corporativo.py .
 
 # Copiar assets (logo, CSS)
-COPY assets/ ./assets/
+COPY ml-prot/assets/ ./assets/
 
 # Copiar arquivos de dados necessários
-COPY simulador_pnl_futuro_base.csv* ./
-COPY data/ ./data/
+COPY ml-prot/simulador_pnl_futuro_base.csv* ./
+COPY ml-prot/data/ ./data/
 
 # Cloud Run usa a variável PORT automaticamente
 # O app já está configurado para ler PORT do ambiente

@@ -3,13 +3,12 @@
 # Os Dockerfiles estão em ml-prot/
 
 steps:
-  # Mudar para o diretório ml-prot antes de fazer build
+  # Build da imagem do App Cenário 1
   - name: 'gcr.io/cloud-builders/docker'
-    dir: 'ml-prot'
     args:
       - 'build'
       - '-f'
-      - 'Dockerfile.cenario1'
+      - 'ml-prot/Dockerfile.cenario1'
       - '-t'
       - 'gcr.io/$PROJECT_ID/femsa-cenario1:$COMMIT_SHA'
       - '-t'
@@ -18,11 +17,10 @@ steps:
 
   # Build da imagem do App Mix Optimization
   - name: 'gcr.io/cloud-builders/docker'
-    dir: 'ml-prot'
     args:
       - 'build'
       - '-f'
-      - 'Dockerfile.mix'
+      - 'ml-prot/Dockerfile.mix'
       - '-t'
       - 'gcr.io/$PROJECT_ID/femsa-mix-optimization:$COMMIT_SHA'
       - '-t'
@@ -32,13 +30,13 @@ steps:
   # Push das imagens para Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/femsa-cenario1:$COMMIT_SHA']
-  
+
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/femsa-cenario1:latest']
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/femsa-mix-optimization:$COMMIT_SHA']
-  
+
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/femsa-mix-optimization:latest']
 
@@ -81,4 +79,7 @@ images:
   - 'gcr.io/$PROJECT_ID/femsa-cenario1:latest'
   - 'gcr.io/$PROJECT_ID/femsa-mix-optimization:$COMMIT_SHA'
   - 'gcr.io/$PROJECT_ID/femsa-mix-optimization:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
 
