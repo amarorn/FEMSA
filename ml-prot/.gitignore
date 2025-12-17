@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Dash
+.env
+*.log
+
+# Dados sensíveis e arquivos grandes
+data/*.xlsx
+data/*.csv
+data/*.tmp
+outputs/*.csv
+outputs/*.png
+*.csv
+!requirements.txt
+
+# Manter estrutura de diretórios mas ignorar conteúdo
+!data/.gitkeep
+!outputs/.gitkeep
+
+# Logs temporários
+/tmp/
+*.log
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+

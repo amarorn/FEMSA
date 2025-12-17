@@ -1,0 +1,8 @@
+/* Sliders vermelhos */
+.rc-slider-track { background-color: #EB262C !important; }      /* trilha preenchida */
+.rc-slider-rail  { background-color: #e5e5e5 !important; }    /* trilha vazia (opcional) */
+.rc-slider-handle { border-color: #EB262C !important; box-shadow: none !important; }
+.rc-slider-handle:hover,
+.rc-slider-handle:focus { border-color: #EB262C !important; }
+.rc-slider-dot-active { border-color: #EB262C !important; }
+.rc-slider-tooltip-inner { background-color: #EB262C !important; border-color: #EB262C !important; }
