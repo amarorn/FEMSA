@@ -37,34 +37,29 @@ def main():
     
     # Caminhos dos scripts
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    app_cenario1 = os.path.join(base_dir, "app_cenario1_corporativo.py")
-    app_mix = os.path.join(base_dir, "app_mix_optimization.py")
+    app_unificado = os.path.join(base_dir, "app_unificado.py")
     
-    # Verificar se os arquivos existem
-    if not os.path.exists(app_cenario1):
-        print(f"[ERRO] Arquivo não encontrado: {app_cenario1}")
-        sys.exit(1)
-    
-    if not os.path.exists(app_mix):
-        print(f"[ERRO] Arquivo não encontrado: {app_mix}")
+    # Verificar se o app unificado existe
+    if not os.path.exists(app_unificado):
+        print(f"[ERRO] Arquivo não encontrado: {app_unificado}")
+        print("[INFO] Certifique-se de que app_unificado.py existe no diretório.")
         sys.exit(1)
     
     print("=" * 60)
-    print("FEMSA - Iniciando Aplicações Dash")
+    print("FEMSA - Iniciando Aplicação Unificada")
     print("=" * 60)
     print()
     
-    # Iniciar app_cenario1_corporativo (porta 8050)
-    process1 = run_app(app_cenario1, 8050, "Cenário 1 Corporativo (P&L)")
+    # Iniciar apenas o app unificado
+    process1 = run_app(app_unificado, 8052, "Aplicação Unificada")
+    process2 = None
     
-    # Aguardar um pouco antes de iniciar o segundo
-    time.sleep(2)
+    if not process1:
+        print("[ERRO] Falha ao iniciar aplicação")
+        sys.exit(1)
     
-    # Iniciar app_mix_optimization (porta 8051)
-    process2 = run_app(app_mix, 8051, "Otimização de Mix")
-    
-    if not process1 or not process2:
-        print("[ERRO] Falha ao iniciar uma ou mais aplicações")
+    if process2 and not process2:
+        print("[ERRO] Falha ao iniciar segunda aplicação")
         sys.exit(1)
     
     print()
@@ -72,9 +67,12 @@ def main():
     print("✓ Aplicações iniciadas com sucesso!")
     print("=" * 60)
     print()
-    print("📍 URLs disponíveis:")
-    print("   • Cenário 1 Corporativo (P&L):     http://localhost:8050")
-    print("   • Otimização de Mix:   http://localhost:8051")
+    print("📍 URL disponível:")
+    print("   • Aplicação Unificada:             http://localhost:8052")
+    print()
+    print("   A aplicação unificada contém:")
+    print("   - Tab 'Simulador P&L': Análise de cenários financeiros")
+    print("   - Tab 'Otimização de Mix': Cálculo de mix ótimo")
     print()
     print("⚠️  Pressione Ctrl+C para encerrar ambas as aplicações")
     print("=" * 60)
@@ -87,9 +85,7 @@ def main():
             if process1.poll() is not None:
                 print(f"[AVISO] app_cenario1_corporativo.py terminou (código: {process1.returncode})")
                 break
-            if process2.poll() is not None:
-                print(f"[AVISO] app_mix_optimization.py terminou (código: {process2.returncode})")
-                break
+            # process2 não é mais usado
             time.sleep(1)
     except KeyboardInterrupt:
         pass
@@ -99,9 +95,7 @@ def main():
         if process1 and process1.poll() is None:
             process1.terminate()
             process1.wait(timeout=5)
-        if process2 and process2.poll() is None:
-            process2.terminate()
-            process2.wait(timeout=5)
+        # process2 não é mais usado
         print("[INFO] Processos encerrados.")
 
 if __name__ == "__main__":
