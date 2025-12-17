@@ -12,6 +12,14 @@ RED='\033[0;31m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
+# Mudar para o diretório raiz do projeto (onde está o cloudbuild.yaml)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$PROJECT_ROOT"
+
+echo -e "${YELLOW}[INFO] Executando de: $PROJECT_ROOT${NC}"
+echo ""
+
 # Configurações (ajustar conforme necessário)
 PROJECT_ID="${GCP_PROJECT_ID:-}"
 REGION="${GCP_REGION:-us-central1}"
@@ -71,7 +79,7 @@ echo "==========================================================================
 echo ""
 
 echo -e "${YELLOW}[INFO] Building Docker image...${NC}"
-docker build -f Dockerfile.cenario1 -t "gcr.io/$PROJECT_ID/femsa-cenario1:latest" .
+docker build -f ml-prot/Dockerfile.cenario1 -t "gcr.io/$PROJECT_ID/femsa-cenario1:latest" .
 
 echo -e "${YELLOW}[INFO] Pushing to Container Registry...${NC}"
 docker push "gcr.io/$PROJECT_ID/femsa-cenario1:latest"
@@ -101,7 +109,7 @@ echo "==========================================================================
 echo ""
 
 echo -e "${YELLOW}[INFO] Building Docker image...${NC}"
-docker build -f Dockerfile.mix -t "gcr.io/$PROJECT_ID/femsa-mix-optimization:latest" .
+docker build -f ml-prot/Dockerfile.mix -t "gcr.io/$PROJECT_ID/femsa-mix-optimization:latest" .
 
 echo -e "${YELLOW}[INFO] Pushing to Container Registry...${NC}"
 docker push "gcr.io/$PROJECT_ID/femsa-mix-optimization:latest"
