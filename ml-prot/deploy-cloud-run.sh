@@ -110,7 +110,8 @@ echo ""
 IMAGE_CENARIO1="$REPO_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/femsa-cenario1:latest"
 
 echo -e "${YELLOW}[INFO] Building Docker image...${NC}"
-docker build -f ml-prot/Dockerfile.cenario1 -t "$IMAGE_CENARIO1" .
+# Cloud Run requer linux/amd64 (não ARM)
+docker build --platform linux/amd64 -f ml-prot/Dockerfile.cenario1 -t "$IMAGE_CENARIO1" .
 
 echo -e "${YELLOW}[INFO] Pushing to Artifact Registry...${NC}"
 docker push "$IMAGE_CENARIO1"
@@ -129,8 +130,16 @@ gcloud run deploy femsa-cenario1 \
   --quiet
 
 # Obter URL do App 1
-URL1=$(gcloud run services describe femsa-cenario1 --region "$REGION" --format 'value(status.url)')
-echo -e "${GREEN}✓ App 1 deployado:${NC} $URL1"
+echo -e "${YELLOW}[INFO] Obtendo URL do Simulador P&L...${NC}"
+URL1=$(gcloud run services describe femsa-cenario1 --region "$REGION" --format 'value(status.url)' 2>/dev/null)
+if [ -z "$URL1" ]; then
+    echo -e "${YELLOW}[AVISO] Não foi possível obter URL automaticamente.${NC}"
+    echo -e "${YELLOW}[INFO] Execute: gcloud run services describe femsa-cenario1 --region $REGION --format 'value(status.url)'${NC}"
+fi
+echo -e "${GREEN}✓ App Simulador P&L deployado!${NC}"
+if [ ! -z "$URL1" ]; then
+    echo -e "${GREEN}   URL: ${BLUE}$URL1${NC}"
+fi
 
 # Build e Deploy App 2
 echo ""
@@ -143,7 +152,8 @@ echo ""
 IMAGE_MIX="$REPO_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/femsa-mix-optimization:latest"
 
 echo -e "${YELLOW}[INFO] Building Docker image...${NC}"
-docker build -f ml-prot/Dockerfile.mix -t "$IMAGE_MIX" .
+# Cloud Run requer linux/amd64 (não ARM)
+docker build --platform linux/amd64 -f ml-prot/Dockerfile.mix -t "$IMAGE_MIX" .
 
 echo -e "${YELLOW}[INFO] Pushing to Artifact Registry...${NC}"
 docker push "$IMAGE_MIX"
@@ -154,16 +164,23 @@ gcloud run deploy femsa-mix-optimization \
   --region "$REGION" \
   --platform managed \
   --allow-unauthenticated \
-  --port 8051 \
-  --memory 1Gi \
-  --cpu 1 \
-  --timeout 300 \
+  --port 8080 \
+  --memory 2Gi \
+  --cpu 2 \
+  --timeout 600 \
   --max-instances 10 \
   --quiet
 
 # Obter URL do App 2
-URL2=$(gcloud run services describe femsa-mix-optimization --region "$REGION" --format 'value(status.url)')
-echo -e "${GREEN}✓ App 2 deployado:${NC} $URL2"
+echo -e "${YELLOW}[INFO] Obtendo URL do Mix Optimization...${NC}"
+URL2=$(gcloud run services describe femsa-mix-optimization --region "$REGION" --format 'value(status.url)' 2>/dev/null)
+if [ -z "$URL2" ]; then
+    echo -e "${YELLOW}[AVISO] Não foi possível obter URL automaticamente.${NC}"
+    echo -e "${YELLOW}[INFO] Execute: gcloud run services describe femsa-mix-optimization --region $REGION --format 'value(status.url)'${NC}"
+    URL2="https://femsa-mix-optimization-tfhauqj6vq-uc.a.run.app"
+fi
+echo -e "${GREEN}✓ App Mix Optimization deployado!${NC}"
+echo -e "${GREEN}   URL: ${BLUE}$URL2${NC}"
 
 # Resumo
 echo ""
@@ -172,8 +189,15 @@ echo -e "${GREEN}✓ Deploy concluído com sucesso!${NC}"
 echo "=========================================================================="
 echo ""
 echo "📍 URLs disponíveis:"
-echo -e "   ${BLUE}App Cenário 1:${NC} $URL1"
-echo -e "   ${BLUE}App Mix Optimization:${NC} $URL2"
+echo ""
+echo -e "   ${BLUE}📊 Simulador P&L (Cenário 1):${NC}"
+echo -e "      $URL1"
+echo ""
+echo -e "   ${BLUE}🎯 Otimização de Mix:${NC}"
+echo -e "      $URL2"
 echo ""
 echo "=========================================================================="
+echo ""
+echo -e "${GREEN}💡 Dica:${NC} Clique nos links acima ou copie e cole no navegador"
+echo ""
 

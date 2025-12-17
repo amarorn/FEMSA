@@ -755,9 +755,27 @@ def calculate_mix_optimization(n_clicks, data_file, months, directorias, marcas,
 # ============================================================================
 if __name__ == "__main__":
     import os
+    import sys
+    
+    try:
     print("Iniciando servidor Dash para Otimização de Mix...")
-    # Ler porta do ambiente (para deploy) ou usar padrão
-    port = int(os.environ.get('PORT', 8051))
-    # Em produção, usar debug=False e host='0.0.0.0'
-    debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
-    app.run(debug=debug_mode, host='0.0.0.0', port=port)
+        # Cloud Run define PORT automaticamente (padrão 8080)
+        # Se não definido, usar 8051 para desenvolvimento local
+        port = int(os.environ.get('PORT', 8051))
+        print(f"[INFO] Iniciando na porta: {port}")
+        # Em produção, usar debug=False e host='0.0.0.0'
+        debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
+        print(f"[INFO] Debug mode: {debug_mode}")
+        print(f"[INFO] Host: 0.0.0.0")
+        
+        # Forçar flush para garantir que logs apareçam
+        sys.stdout.flush()
+        sys.stderr.flush()
+        
+        # use_reloader=False é importante para produção
+        app.run(debug=debug_mode, host='0.0.0.0', port=port, use_reloader=False)
+    except Exception as e:
+        print(f"[ERRO] Falha ao iniciar servidor: {e}", file=sys.stderr)
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)

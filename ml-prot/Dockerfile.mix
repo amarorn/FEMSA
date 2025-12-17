@@ -27,10 +27,9 @@ COPY ml-prot/assets/ ./assets/
 COPY ml-prot/data_unified.csv* ./
 COPY ml-prot/data_unified_filtered.csv* ./
 
-# Cloud Run usa a variável PORT automaticamente
-# O app já está configurado para ler PORT do ambiente
-ENV PORT=8051
-EXPOSE 8051
+# Cloud Run define PORT automaticamente via variável de ambiente
+# Não definir PORT aqui, deixar Cloud Run definir
+EXPOSE 8080
 
 # Comando para iniciar a aplicação
 CMD ["python", "app_mix_optimization.py"]
