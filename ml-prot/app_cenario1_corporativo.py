@@ -1806,6 +1806,9 @@ TIPOS = nonempty_unique(df_master["tipo_consumo"])
 # LAYOUT CORPORATIVO - ESTILO POWERBI
 # ============================================================================
 app = Dash(__name__)
+
+# Expor servidor para gunicorn
+server = app.server
 app.title = "FEMSA - Simulador de P&L e Otimização"
 
 # CSS Customizado
@@ -3176,9 +3179,23 @@ if __name__ == "__main__":
     print(f"[INFO] CSV do 'Master DataFrame' carregado: {DATA_FILE}")
     print(f"Total de linhas no Master DF: {len(df_master)}")
     print("Iniciando o servidor Dash...")
-    # Ler porta do ambiente (para deploy) ou usar padrão
+    # Cloud Run define PORT automaticamente (padrão 8080)
+    # Se não definido, usar 8050 para desenvolvimento local
     port = int(os.environ.get('PORT', 8050))
+    print(f"[INFO] Iniciando na porta: {port}")
     # Em produção, usar debug=False e host='0.0.0.0'
     debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
-    app.run(debug=debug_mode, host='0.0.0.0', port=port)
+    print(f"[INFO] Debug mode: {debug_mode}")
+    print(f"[INFO] Host: 0.0.0.0")
+    import sys
+    sys.stdout.flush()
+    sys.stderr.flush()
+    try:
+        # use_reloader=False é importante para produção
+        app.run(debug=debug_mode, host='0.0.0.0', port=port, use_reloader=False)
+    except Exception as e:
+        print(f"[ERRO] Falha ao iniciar servidor: {e}", file=sys.stderr)
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
 

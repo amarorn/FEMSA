@@ -27,11 +27,12 @@ COPY ml-prot/assets/ ./assets/
 COPY ml-prot/simulador_pnl_futuro_base.csv* ./
 COPY ml-prot/data/ ./data/
 
-# Cloud Run usa a variável PORT automaticamente
-# O app já está configurado para ler PORT do ambiente
-ENV PORT=8050
-EXPOSE 8050
+# Cloud Run define PORT automaticamente via variável de ambiente
+# Não definir PORT aqui, deixar Cloud Run definir
+EXPOSE 8080
 
 # Comando para iniciar a aplicação
+# Cloud Run define PORT automaticamente via variável de ambiente
+# Usar python diretamente (Dash gerencia o servidor)
 CMD ["python", "app_cenario1_corporativo.py"]
 
