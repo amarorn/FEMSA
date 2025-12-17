@@ -758,7 +758,7 @@ if __name__ == "__main__":
     import sys
     
     try:
-    print("Iniciando servidor Dash para Otimização de Mix...")
+        print("Iniciando servidor Dash para Otimização de Mix...")
         # Cloud Run define PORT automaticamente (padrão 8080)
         # Se não definido, usar 8051 para desenvolvimento local
         port = int(os.environ.get('PORT', 8051))
