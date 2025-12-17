@@ -1,0 +1,35 @@
+# docker-compose.yml para testar localmente
+# Não é necessário para Cloud Run, mas útil para desenvolvimento
+
+version: '3.8'
+
+services:
+  cenario1:
+    build:
+      context: .
+      dockerfile: Dockerfile.cenario1
+    ports:
+      - "8050:8050"
+    environment:
+      - PORT=8050
+      - DEBUG=false
+    volumes:
+      # Montar volumes para desenvolvimento (opcional)
+      - ./outputs:/app/outputs:ro
+      - ./data:/app/data:ro
+    restart: unless-stopped
+
+  mix-optimization:
+    build:
+      context: .
+      dockerfile: Dockerfile.mix
+    ports:
+      - "8051:8051"
+    environment:
+      - PORT=8051
+      - DEBUG=false
+    volumes:
+      # Montar volumes para desenvolvimento (opcional)
+      - ./data:/app/data:ro
+    restart: unless-stopped
+

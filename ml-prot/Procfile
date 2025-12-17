@@ -1,0 +1,4 @@
+# Procfile para Heroku/Railway
+# Inicia ambos os apps (requer ajuste para funcionar com múltiplas portas)
+web: python app_cenario1_corporativo.py
+

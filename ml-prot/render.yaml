@@ -1,0 +1,24 @@
+# Configuração para Render.com
+# Este arquivo permite deploy automático dos apps Dash
+
+services:
+  - type: web
+    name: femsa-cenario1
+    env: python
+    buildCommand: pip install -r requirements-minimal.txt
+    startCommand: python app_cenario1_corporativo.py
+    envVars:
+      - key: PORT
+        value: 8050
+    plan: free
+
+  - type: web
+    name: femsa-mix-optimization
+    env: python
+    buildCommand: pip install -r requirements-minimal.txt
+    startCommand: python app_mix_optimization.py
+    envVars:
+      - key: PORT
+        value: 8051
+    plan: free
+

@@ -754,5 +754,10 @@ def calculate_mix_optimization(n_clicks, data_file, months, directorias, marcas,
 # MAIN
 # ============================================================================
 if __name__ == "__main__":
+    import os
     print("Iniciando servidor Dash para Otimização de Mix...")
-    app.run(debug=True, port=8051)
+    # Ler porta do ambiente (para deploy) ou usar padrão
+    port = int(os.environ.get('PORT', 8051))
+    # Em produção, usar debug=False e host='0.0.0.0'
+    debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
+    app.run(debug=debug_mode, host='0.0.0.0', port=port)
